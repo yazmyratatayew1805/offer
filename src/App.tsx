@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import {
-  about,
   faq,
   finalCta,
   footer,
   forWhom,
   hero,
-  howMockWorks,
-  services,
+  howItWorks,
+  ohota,
+  products,
   site,
+  vibe,
 } from './content'
 
 function useReveal() {
@@ -70,8 +71,8 @@ export default function App() {
         <div className="hero-bg" aria-hidden>
           <div className="hero-orb hero-orb-a" />
           <div className="hero-orb hero-orb-b" />
-          <div className="hero-grid" />
-          <div className="hero-wave" />
+          <div className="hero-scan" />
+          <div className="hero-depth" />
         </div>
 
         <nav className="nav">
@@ -88,22 +89,109 @@ export default function App() {
           <h1 className="hero-title reveal reveal-delay-1">{hero.headline}</h1>
           <p className="hero-support reveal reveal-delay-2">{hero.support}</p>
           <div className="hero-cta reveal reveal-delay-3">
-            <a className="btn btn-primary" href="#services">
-              {hero.primaryCta}
+            <a className="btn btn-primary" href={hero.ctaHuntHref}>
+              {hero.ctaHunt}
             </a>
-            <a
-              className="btn btn-ghost"
-              href={site.telegramUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {hero.secondaryCta}
+            <a className="btn btn-accent" href={hero.ctaVibeHref}>
+              {hero.ctaVibe}
             </a>
           </div>
         </div>
       </header>
 
       <main>
+        <section className="section products" id="products">
+          <h2 className="section-title reveal">{products.title}</h2>
+          <p className="section-sub reveal">{products.subtitle}</p>
+          <div className="product-blocks">
+            {products.items.map((item, i) => (
+              <article
+                key={item.id}
+                id={item.id}
+                className={`product-block reveal reveal-delay-${i}`}
+              >
+                <span className="product-tag">{item.tag}</span>
+                <h3>{item.name}</h3>
+                <p>{item.pitch}</p>
+                <a className="btn btn-ink" href={item.href}>
+                  {item.cta}
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section tariffs" id={ohota.tariffsId}>
+          <h2 className="section-title reveal">{ohota.title}</h2>
+          <p className="section-sub reveal">{ohota.subtitle}</p>
+          <div className="tier-grid">
+            {ohota.tariffs.map((tier, i) => (
+              <article
+                key={tier.id}
+                className={`tier-card${tier.popular ? ' is-popular' : ''} reveal reveal-delay-${i}`}
+              >
+                {tier.popular ? <span className="tier-badge">{tier.badge}</span> : null}
+                <h3>{tier.name}</h3>
+                <p className="tier-price">{tier.price}</p>
+                <ul>
+                  {tier.features.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                <a className="btn btn-tier" href={site.telegramUrl} target="_blank" rel="noreferrer">
+                  {tier.cta}
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section tracks" id={vibe.tariffsId}>
+          <h2 className="section-title reveal">{vibe.title}</h2>
+          <p className="section-sub reveal">{vibe.subtitle}</p>
+          <div className="track-list">
+            {vibe.tracks.map((track, i) => (
+              <article key={track.id} className={`track-row reveal reveal-delay-${i % 3}`}>
+                <div className="track-head">
+                  <div>
+                    <h3>{track.name}</h3>
+                    <p className="track-summary">{track.summary}</p>
+                  </div>
+                  <p className="track-price">{track.price}</p>
+                </div>
+                <ul>
+                  {track.features.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                <a
+                  className="btn btn-ink btn-sm"
+                  href={site.telegramUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {track.cta}
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section how" id="how">
+          <h2 className="section-title reveal">{howItWorks.title}</h2>
+          <ol className="steps">
+            {howItWorks.steps.map((step, i) => (
+              <li key={step.n} className={`step reveal reveal-delay-${i % 4}`}>
+                <span className="step-n">{step.n}</span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         <section className="section for-whom" id="for-whom">
           <h2 className="section-title reveal">{forWhom.title}</h2>
           <div className="split">
@@ -126,59 +214,6 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section services" id="services">
-          <h2 className="section-title reveal">{services.title}</h2>
-          <p className="section-sub reveal">{services.subtitle}</p>
-          <div className="service-list">
-            {services.items.map((item, i) => (
-              <article
-                key={item.id}
-                className={`service${item.featured ? ' is-featured' : ''} reveal reveal-delay-${i % 3}`}
-              >
-                <div className="service-top">
-                  <div>
-                    <h3>{item.name}</h3>
-                    <p className="service-meta">{item.duration}</p>
-                  </div>
-                  <div className="service-price">
-                    <span className="price">{item.price}</span>
-                    {item.priceNote ? <span className="price-note">{item.priceNote}</span> : null}
-                  </div>
-                </div>
-                <p className="service-desc">{item.description}</p>
-                <a className="service-cta" href={site.telegramUrl} target="_blank" rel="noreferrer">
-                  {item.cta}
-                </a>
-              </article>
-            ))}
-          </div>
-          <aside className="service-secondary reveal">
-            <span className="badge">{services.secondary.badge}</span>
-            <h3>{services.secondary.name}</h3>
-            <p>{services.secondary.description}</p>
-          </aside>
-        </section>
-
-        <section className="section how" id="how">
-          <h2 className="section-title reveal">{howMockWorks.title}</h2>
-          <ol className="steps">
-            {howMockWorks.steps.map((step, i) => (
-              <li key={step.n} className={`step reveal reveal-delay-${i % 4}`}>
-                <span className="step-n">{step.n}</span>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="section about" id="about">
-          <h2 className="section-title reveal">{about.title}</h2>
-          <p className="about-text reveal">{about.text}</p>
-        </section>
-
         <section className="section faq" id="faq">
           <h2 className="section-title reveal">{faq.title}</h2>
           <div className="faq-list reveal">
@@ -196,6 +231,12 @@ export default function App() {
               {finalCta.button}
             </a>
             <p className="final-handle">{site.telegramHandle}</p>
+            <p className="final-channel">
+              {finalCta.channelNote}{' '}
+              <a href={site.channelUrl} target="_blank" rel="noreferrer">
+                {site.channelHandle}
+              </a>
+            </p>
           </div>
         </section>
       </main>

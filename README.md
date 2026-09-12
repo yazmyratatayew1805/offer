@@ -1,40 +1,76 @@
 # До оффера (Offer Lab)
 
-Личный лендинг для менторинга backend / Tech Lead: mock-собесы, прожарка резюме, пакет «До оффера».
+Продающий лендинг двух продуктов + backend/бот/админка.
+
+1. **Охота на оффер** — Senior/TL для backend + онбординг первого месяца  
+2. **Вайб до прода** — AI-сборка с инженерными стандартами (спринт / фриланс / веб)
+
+## Структура
+
+```
+offer-lab/          # Vite-лендинг (Cloudflare Pages/Workers — как раньше)
+  src/
+  server/           # Fastify API + SQLite + Telegram webhook
+  admin/            # Админ-SPA (тарифы, заявки, лид-магниты)
+```
+
+Лендинг **оставлен в корне**, чтобы не ломать текущий деплой статики на Cloudflare. API — отдельный сервис.
 
 ## Запуск
 
+### Лендинг
+
 ```bash
-cd C:\Users\User\offer-lab
 npm install
-npm run dev
+npm run dev      # http://localhost:5173
+npm run build
 ```
 
-Откройте в браузере: [http://localhost:5173/](http://localhost:5173/)
-
-Сборка:
+### API + бот
 
 ```bash
-npm run build
-npm run preview
+cd server
+cp .env.example .env   # задайте ADMIN_TOKEN; BOT_TOKEN — когда будет бот
+npm install
+npm run dev            # http://localhost:3001
 ```
 
-## Где менять тексты, цены и Telegram
+Подробнее: [`server/README.md`](server/README.md).  
+**Деплой API + webhook бота:** [`server/DEPLOY.md`](server/DEPLOY.md) (Railway / HTTPS / setWebhook).
 
-Всё в одном файле: [`src/content.ts`](src/content.ts)
+### Админка
 
-| Что | Поле |
+```bash
+cd admin
+npm install
+npm run dev            # http://localhost:5174
+```
+
+Вставьте `ADMIN_TOKEN` из `server/.env`. См. [`admin/README.md`](admin/README.md).
+
+## Telegram на лендинге
+
+В [`src/content.ts`](src/content.ts):
+
+| Что | Значение |
 | --- | --- |
-| Telegram | `site.telegramHandle` (`@your_username`) |
-| Цены и услуги | `services.items` |
-| Hero / FAQ / CTA | соответствующие экспорты в том же файле |
+| Личные заявки / «Написать» | `@myratcode` → https://t.me/myratcode |
+| Канал (контент / подписка бота) | `@myrat_code` → https://t.me/myrat_code |
 
-Ссылка на Telegram собирается из `@username` автоматически.
+Все CTA тарифов и финальная кнопка ведут на личный Telegram.
+
+## Cloudflare
+
+Статический лендинг и API **раздельны**: Pages/Workers отдают только фронт. API (и webhook бота) — отдельно.
+
+Пошаговый деплой (Railway, env, setWebhook, админка): **[`server/DEPLOY.md`](server/DEPLOY.md)**.
 
 ## Стек
 
-Vite + React + TypeScript. Один лендинг, без бэкенда.
+- Web: Vite + React + TypeScript  
+- Server: Fastify + better-sqlite3 + Grammy  
+- Admin: Vite + React  
 
-## Дизайн
+## Дизайн лендинга
 
-**Night-ocean editorial** — чернильный navy, океанский teal, светлая «бумажная» середина. Шрифты: Unbounded + Manrope (кириллица).
+**Night-ocean sales** — ink + teal. Шрифты: Unbounded + Manrope.
